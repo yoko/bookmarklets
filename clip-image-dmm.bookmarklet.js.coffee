@@ -22,7 +22,7 @@ filter = (src) ->
     undefined
 
 
-process = (filter) ->
+process = ->
   sources = sources.reverse().reduceRight (a, b) ->
     if b and a.indexOf(b) is -1 then a.concat b else a
   , []
