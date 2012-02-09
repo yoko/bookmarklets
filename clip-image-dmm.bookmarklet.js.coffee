@@ -9,7 +9,7 @@
 # - Array.reduce を独自に prototype 拡張していて、しかも機能が違う（ .com のみ）
 #   - Array.reduceRight は生きているので array.reverse().reduceRight する
 # - .com は Prototype.js
-# - .net は jQuery
+# - .no.jp は jQuery
 
 
 sources = []
