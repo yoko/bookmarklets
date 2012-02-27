@@ -1,5 +1,5 @@
 ###
-@title     Linked Image List
+@title     List Linked Images
 @include   http://*
 @include   https://*
 @license   MIT License
