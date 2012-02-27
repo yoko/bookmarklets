@@ -1,5 +1,5 @@
 ###
-@title     Clip Linked Images
+@title     Linked Image List
 @include   http://*
 @include   https://*
 @license   MIT License
@@ -16,10 +16,10 @@ process = ->
   , []
 
   images = for src in sources
-    "<img src=\"#{src}\">"
+    "#{src}\n<img src=\"#{src}\">\n"
 
   if images.length
-    document.body.outerHTML = "<body>#{location.href}#{images.join ''}</body>"
+    document.body.outerHTML = "<body>#{images.join ''}</body>"
   else
     alert "Image Not Found"
 

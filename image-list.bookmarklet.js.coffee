@@ -1,5 +1,5 @@
 ###
-@title     Clip Linked Images
+@title     Image List
 @include   http://*
 @include   https://*
 @license   MIT License
@@ -16,15 +16,15 @@ process = ->
   , []
 
   images = for src in sources
-    "<img src=\"#{src}\">"
+    "#{src}\n<img src=\"#{src}\">\n"
 
   if images.length
-    document.body.outerHTML = "<body>#{location.href}#{images.join ''}</body>"
+    document.body.outerHTML = "<body>#{images.join ''}</body>"
   else
     alert "Image Not Found"
 
-add_linked_image = ->
-  add(a.href for a in document.links)
+add_image = ->
+  add(img.src for img in document.images)
 
 add = (target) ->
   items = Array.prototype.slice.call(target).filter (item) ->
@@ -32,5 +32,5 @@ add = (target) ->
   sources = sources.concat if filter then items.map(filter) else items
 
 
-add_linked_image()
+add_image()
 process()

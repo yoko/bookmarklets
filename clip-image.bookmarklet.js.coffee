@@ -7,6 +7,7 @@
 
 
 sources = []
+filter = null
 
 
 process = ->
