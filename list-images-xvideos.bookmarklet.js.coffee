@@ -7,7 +7,7 @@
 src = document.querySelector('img[border="1"]').src
 
 sources = for n in [1..30] # displayFlash.js
-  src.replace /\d+(\.jpg)/, "#{n}$1"
+  src.replace /\d+(\.jpg)$/, "#{n}$1"
 
 images = for src in sources
   "#{src}\n<img src=\"#{src}\">\n"
