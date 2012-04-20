@@ -1,7 +1,7 @@
 ###
 @title     List Images (DMM)
-@include   http://www.dmm.com/
-@include   http://www.dmm.co.jp/
+@include   http://www.dmm.com/*
+@include   http://www.dmm.co.jp/*
 @license   MIT License
 ###
 

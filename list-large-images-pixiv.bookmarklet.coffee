@@ -1,6 +1,6 @@
 ###
 @title     List Large Images (pixiv)
-@include   http://www.pixiv.net/
+@include   http://www.pixiv.net/*
 @license   MIT License
 ###
 

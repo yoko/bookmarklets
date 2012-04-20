@@ -1,6 +1,6 @@
 ###
 @title     List Images (XVideos)
-@include   http://www.xvideos.com/
+@include   http://www.xvideos.com/*
 @license   MIT License
 ###
 
