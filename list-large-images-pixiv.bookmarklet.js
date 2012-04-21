@@ -11,7 +11,7 @@ $('img').each(function() {
 	var src = this.dataset.src || this.src;
 	// - /img/: サムネイル
 	// - \d+_s: 削除、マイピク限定を除く
-	if (!(src && (/\/img\/[\w-]+\/\d+_s\.(?:jpg|png|gif)$/.test(src)))) return;
+	if (!(src && (/\/img\/[\w-]+\/\d+_s\.(?:jpg|png|gif)(?:\?\d+)?$/.test(src)))) return;
 
 	images.push({
 		target: this,
