@@ -1,3 +1,4 @@
+// javascript:new function(s,d){d=document;s=d.createElement('script');s.charset='utf-8';s.src='https://raw.github.com/yoko/bookmarklets/master/list-large-images-pixiv.bookmarklet.js';d.body.appendChild(s)}
 // @title     List Large Images (pixiv)
 // @include   http://www.pixiv.net/*
 // @license   MIT License
@@ -10,7 +11,7 @@ $('img').each(function() {
 	var src = this.dataset.src || this.src;
 	// - /img/: サムネイル
 	// - \d+_s: 削除、マイピク限定を除く
-	if (!(src && (/\/img\/.+\/\d+_s\.(?:jpg|png|gif)$/.test(src)))) return;
+	if (!(src && (/\/img\/[\w-]+\/\d+_s\.(?:jpg|png|gif)$/.test(src)))) return;
 
 	images.push({
 		target: this,
