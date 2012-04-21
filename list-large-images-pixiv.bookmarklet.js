@@ -36,6 +36,7 @@ container = $('ul', container);
 (function find() {
 	var img = images.shift();
 
+	// mode=big で判定すると漫画の際に mode=medium と同じページが表示されるので mode=manga を見る
 	$.get($(img.target).closest('a')[0].href.replace('mode=medium', 'mode=manga'))
 		// エラーでも 200 が返るので常に done で受ける
 		.done(function(data) {
