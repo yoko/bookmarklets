@@ -41,8 +41,9 @@ container = $('ul', container);
 		.done(function(data) {
 			if (data.indexOf('指定されたIDは漫画ではありません') === -1) {
 				console.log('maybe manga:', img.src);
-				data = data.replace(/\s/g, '');
-				var urls = data.match(/http:\/\/img\d+\.pixiv\.net\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
+				var urls = data
+					.replace(/\s/g, '')
+					.match(/http:\/\/img\d+\.pixiv\.net\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
 				add(urls);
 			}
 			else {
