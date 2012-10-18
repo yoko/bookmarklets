@@ -11,7 +11,7 @@ $('img').each(function() {
 	var src = this.dataset.src || this.src;
 	// - /img/: サムネイル
 	// - \d+_s: 削除、マイピク限定を除く
-	if (!(src && (/\/i(mg)?\/[\w-]+\/\d+_s\.(?:jpg|png|gif)(?:\?\d+)?$/.test(src)))) return;
+	if (!(src && (/\/i?\/[\w-]+\/\d+_s\.(?:jpg|png|gif)(?:\?\d+)?$/.test(src)))) return;
 
 	images.push({
 		target: this,
@@ -44,7 +44,7 @@ container = $('ul', container);
 				console.log('maybe manga:', img.src);
 				var urls = data
 					.replace(/\s/g, '')
-					.match(/http:\/\/i(mg)?\d+\.pixiv\.net\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
+					.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
 				add(urls);
 			}
 			else {
