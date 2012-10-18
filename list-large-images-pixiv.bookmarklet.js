@@ -44,7 +44,7 @@ container = $('ul', container);
 				console.log('maybe manga:', img.src);
 				var urls = data
 					.replace(/\s/g, '')
-					.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
+					.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
 				add(urls);
 			}
 			else {
