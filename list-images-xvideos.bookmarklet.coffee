@@ -4,7 +4,7 @@
 @license   MIT License
 ###
 
-src = document.querySelector('img[border="1"]').src
+src = document.querySelector('.thumb').src
 
 sources = for n in [1..30] # displayFlash.js
   src.replace /\d+(\.jpg)$/, "#{n}$1"
