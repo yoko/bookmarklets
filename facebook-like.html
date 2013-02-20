@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Facebook Like</title>
+<style>
+body {
+	width: 450px;
+	margin: 50px auto;
+	font-family: "lucida grande", sans-serif;
+}
+
+h1 {
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+a {
+	color: #555;
+}
+</style>
+</head>
+
+<body>
+<script>
+	var url = location.hash.slice(1);
+	document.write('<h1><a href="' + url + '">' + decodeURIComponent(url) + '</a></h1>');
+	document.write('<div class="fb-like" data-href="' + url + '" data-send="false" data-width="450" data-show-faces="true"></div>');
+</script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=197418883663634";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+</body>
+</html>
