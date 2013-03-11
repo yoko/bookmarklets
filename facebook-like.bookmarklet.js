@@ -7,9 +7,8 @@
 
 var url = location.href;
 w.open(
-	'http://yoko.github.com/bookmarklets/facebook-like.html#' + encodeURIComponent(url),
-	null,
-	'width=500,height=300'
+	'http://yoko.github.com/bookmarklets/facebook-like.html#' + url,
+	null
 );
 
 })(this, document);
