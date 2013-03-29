@@ -3,61 +3,129 @@
 // @include   http://www.pixiv.net/*
 // @license   MIT License
 
-(function(w, d, $) {
+(function(w, d, $) { 'use strict';
 
-var images = [], container;
-
-$('img').each(function() {
-	var src = this.dataset.src || this.src;
-	// - /img\d+/: サムネイル
-	// - \d+_s: 削除、マイピク限定を除く
-	if (!(src && (/\/img\/[\w-]+\/\d+_s\.(?:jpg|png|gif)(?:\?\d+)?$/.test(src)))) return;
-
-	images.push({
-		target: this,
-		src   : src.replace(/\_s(\.)/, '$1')
-	});
-});
-
-if (!images.length) return;
-
-container = $('\
-<section class="ui-modal-container">\
-	<div class="ui-modal-background" onclick="pixiv.modal.close()"></div>\
-	<div class="ui-modal medium">\
-		<div class="close" onclick="pixiv.modal.close()"></div>\
-		<div class="content"><ul></ul></div>\
-	</div>\
+var completed = false;
+var container = $('\
+<div class="introduction-modal-container" style="display:block;">\
+<section class="introduction-modal">\
+<div class="close" onclick="pixiv.modal.close()"></div>\
+<ul></ul>\
 </section>\
+</div>\
 ').appendTo('body');
-pixiv.modal.open(container, true);
+pixiv.modal.open(container);
+
 container = $('ul', container);
+var url = location.href,
+	page = $('.pager-container').length ? 1 : 0,
+	latest_id = w.prompt('latest id:');
 
-(function find() {
-	var img = images.shift();
+(function loop() {
+	$.get(url, page ? {p: page} : null).then(function(html) {
+		var images = [];
+		$(html).find('img').each(function() {
+			// 1. http://i\d+\.pixiv\.net/img-inf/img/\d{4}/\d{2}/\d{2}/\d{2}/\d{2}/\d{2}/\d+_s\.(jpg|png|gif)
+			// 2. http://i\d+\.pixiv\.net/img\d+/img/[\w-]+/\d+_s\.(jpg|png|gif)
+			var src = this.dataset.src || this.src,
+				m = /(\d+)_s\.(?:jpg|png|gif)(?:\?\d+)?$/.exec(src);
+			if (!m) return;
+			if (m[1] === latest_id) {
+				completed = true;
+				return false;
+			}
+			images.push(this);
+		});
+		if (!images.length) return;
 
-	// mode=big で判定すると漫画の際に mode=medium と同じページが表示されるので mode=manga を見る
-	$.get($(img.target).closest('a')[0].href.replace('mode=medium', 'mode=manga'))
-		// エラーでも 200 が返るので常に done で受ける
-		.done(function(data) {
-			if (data.indexOf('指定されたIDは漫画ではありません') === -1) {
-				console.log('maybe manga:', img.src);
-				var urls = data
-					.replace(/\s/g, '')
-					.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
-				add(urls);
+		console.log('images', images);
+		findImage(images, page).then(function() {
+			if (!page || !latest_id || completed) {
+				console.log('completed');
+				$('<p>completed</p>').appendTo(container);
 			}
 			else {
-				console.log('maybe illustration:', img.src);
-				add(img.src);
+				console.log('next page');
+				++page;
+				loop();
 			}
-		})
-		.always(function() {
-			images.length ?
-				w.setTimeout(find, 1000) :
-				$('<p>completed</p>').appendTo(container);
 		});
+	});
 })();
+
+function findImage(images, page) {
+	return (function loop() {
+		var target = $(images.shift()),
+			url = target.closest('a').attr('href'),
+			src = target.dataset('src') || target.attr('src');
+
+		function next() {
+			if (images.length) {
+				return loop();
+			}
+			else {
+				$('<p>completed page ' + page + '</p>').appendTo(container);
+			}
+		}
+
+		return wait(1000).then(function() {
+			console.log('findImage', url);
+			// mode=bigで判定すると漫画の際にmode=mediumと同じページが表示されるのでmode=mangaを見る
+			return $.get(url.replace('mode=medium', 'mode=manga')).then(
+				// エラーでも200が返るので常にdoneで受ける
+				function(html) {
+					if (html.indexOf('指定されたIDは漫画ではありません') === -1) {
+						console.log('maybe manga:', src);
+						add(findMangaURL(html));
+						return next();
+					}
+					else {
+						console.log('maybe illustration:', src);
+						if (oldImage(src)) {
+							add(src.replace(/_s(\.)/, '$1'));
+							return next();
+						}
+						else {
+							return wait(1000).then(function() {
+								return $.get(url).then(function(html) {
+									add(findURL(html));
+									return next();
+								});
+							});
+						}
+					}
+				},
+				function() {
+					console.log('error', src);
+					return next();
+				}
+			);
+		});
+	})();
+}
+
+function oldImage(src) {
+	return /\/img\d+\/img\/[\w-]+\/\d+_s\.(?:jpg|png|gif)/.test(src);
+}
+
+function findURL(text) {
+	var urls = text
+		.replace(/\s/g, '')
+		.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/img\/[\w-]+\/\d+_m?\.(?:jpg|png|gif)/g);
+	urls = urls.map(function(url) {
+		return url.replace(/_m(\.)/, '$1');
+	});
+	console.log('findURL', urls);
+	return urls;
+}
+
+function findMangaURL(text) {
+	var urls = text
+		.replace(/\s/g, '')
+		.match(/http:\/\/i\d+\.pixiv\.net\/img\d+\/img\/[\w-]+\/\d+_p\d+\.(?:jpg|png|gif)/g);
+	console.log('findMangaURL', urls);
+	return urls;
+}
 
 function add(urls) {
 	urls = $.makeArray(urls);
@@ -65,6 +133,15 @@ function add(urls) {
 	for (var i = 0, url; url = urls[i]; ++i) {
 		$('<li>' + url + '</li>').appendTo(container);
 	}
+}
+
+function wait(time) {
+	var d = $.Deferred();
+	setTimeout(function() {
+		d.resolve();
+	}, time);
+	console.log('waiting', time, new Date().getMilliseconds());
+	return d;
 }
 
 })(this, document, jQuery);
