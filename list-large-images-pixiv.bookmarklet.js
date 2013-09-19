@@ -9,7 +9,7 @@ var completed = false;
 var container = $('\
 <div class="introduction-modal-container" style="display:block;">\
 <section class="introduction-modal">\
-<div class="close" onclick="pixiv.modal.close()"></div>\
+<div class="close ui-modal-close"></div>\
 <ul></ul>\
 </section>\
 </div>\
