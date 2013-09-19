@@ -14,7 +14,7 @@ var container = $('\
 </section>\
 </div>\
 ').appendTo('body');
-pixiv.modal.open(container);
+pixiv.ui.modal.push(container, {block: true});
 
 container = $('ul', container);
 var url = location.href,
@@ -64,7 +64,7 @@ function findImage(images, page) {
 				return loop();
 			}
 			else {
-				$('<p>completed page ' + page + '</p>').appendTo(container);
+				console.log('completed page ' + page);
 			}
 		}
 
